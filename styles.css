@@ -53,7 +53,7 @@ button {
   width: min(100%, 1180px);
   min-height: 100svh;
   margin: 0 auto;
-  padding: 0 clamp(16px, 5vw, 56px) 128px;
+  padding: 0 clamp(16px, 5vw, 56px) 148px;
 }
 
 .screen-active {
@@ -761,6 +761,116 @@ textarea::placeholder {
   justify-content: space-between;
 }
 
+.share-card,
+.social-account-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  border-radius: 18px;
+  padding: 18px;
+  background: var(--surface);
+}
+
+.share-card h2,
+.social-account-card h2,
+.media-card h2 {
+  margin: 0 0 5px;
+  font-size: 19px;
+  line-height: 1.15;
+}
+
+.share-card p,
+.social-account-card p,
+.media-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.social-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #ff5f6d, #ffc371);
+  font-weight: 900;
+}
+
+.secondary-link,
+.primary-link,
+.media-card a {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 10px 14px;
+  color: var(--blue);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 850;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.primary-link {
+  color: #fff;
+  background: var(--blue);
+}
+
+.media-header {
+  justify-content: flex-start;
+  margin-bottom: 18px;
+  padding-top: 22px;
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.media-card {
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.media-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.media-card-content {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+}
+
+.media-source {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.media-source span {
+  color: #ef4b57;
+}
+
+.media-source small {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .order-item .status-dot {
   width: 14px;
   height: 14px;
@@ -953,6 +1063,116 @@ textarea {
 .toast.show {
   opacity: 1;
   transform: translate(-50%, 0);
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 18;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: min(100%, 1180px);
+  padding: 8px clamp(12px, 4vw, 44px) calc(8px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(18px);
+  transform: translateX(-50%);
+}
+
+.bottom-nav button {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  min-height: 54px;
+  border-radius: 14px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.bottom-nav button.active {
+  color: #111;
+  background: var(--surface);
+}
+
+.bottom-nav span {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.nav-home {
+  border: 3px solid currentColor;
+  border-top: 0;
+  border-radius: 4px 4px 7px 7px;
+  transform: translateY(5px);
+}
+
+.nav-home::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: -9px;
+  width: 16px;
+  height: 16px;
+  border-left: 3px solid currentColor;
+  border-top: 3px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.nav-order {
+  border: 3px solid currentColor;
+  border-radius: 7px;
+}
+
+.nav-order::before,
+.nav-order::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  height: 3px;
+  border-radius: 99px;
+  background: currentColor;
+}
+
+.nav-order::before {
+  top: 7px;
+}
+
+.nav-order::after {
+  bottom: 7px;
+}
+
+.nav-media {
+  border: 3px solid currentColor;
+  border-radius: 7px;
+}
+
+.nav-media::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.nav-media::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  height: 8px;
+  border-radius: 3px;
+  background: currentColor;
 }
 
 button:active {

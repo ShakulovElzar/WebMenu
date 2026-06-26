@@ -2,6 +2,7 @@ const CONFIG = {
   tableId: readTableId(),
   useMockApi: true,
   apiBaseUrl: "https://your-api.example.com",
+  instagramUrl: "https://www.instagram.com/sissi_bistro_bar_mdc",
 };
 
 const MENU_IMAGES = {
@@ -160,6 +161,36 @@ const MOCK_MENU = [
   menuItem("cioccolata-nocciola", "Nocciola", "Cioccolata", 7, "chocolate", 88, ["Chocolate"], false, null, "Fondente con panna, topping alla nocciola e granella."),
 ];
 
+const MOCK_MEDIA_POSTS = [
+  {
+    id: "sissi-instagram-1",
+    source: "Instagram",
+    account: "@sissi_bistro_bar_mdc",
+    title: "Latest from Sissi",
+    caption: "Open the official profile to view the newest posts, stories, and reels.",
+    image: MENU_IMAGES.cocktail,
+    url: CONFIG.instagramUrl,
+  },
+  {
+    id: "sissi-instagram-2",
+    source: "Instagram",
+    account: "@sissi_bistro_bar_mdc",
+    title: "Bistro moments",
+    caption: "A place for approved customer photos and tagged visits.",
+    image: MENU_IMAGES.dessert,
+    url: CONFIG.instagramUrl,
+  },
+  {
+    id: "sissi-instagram-3",
+    source: "Instagram",
+    account: "@sissi_bistro_bar_mdc",
+    title: "Food and drinks",
+    caption: "Use real Instagram post URLs here when you choose which posts to feature.",
+    image: MENU_IMAGES.kitchen,
+    url: CONFIG.instagramUrl,
+  },
+];
+
 const Api = {
   async getMenu() {
     if (CONFIG.useMockApi) return delay(withLocalLikes(MOCK_MENU));
@@ -237,8 +268,10 @@ const priceText = (item) => (item.priceLabel ? labelPrice(item.priceLabel) : mon
 const menuView = $("#menuView");
 const cartView = $("#cartView");
 const statusView = $("#statusView");
+const mediaView = $("#mediaView");
 const categoryRow = $("#categoryRow");
 const menuGrid = $("#menuGrid");
+const mediaGrid = $("#mediaGrid");
 const detailSheet = $("#detailSheet");
 const suggestionRow = $("#suggestionRow");
 const heroCard = $("#heroCard");
@@ -254,6 +287,7 @@ async function init() {
   renderCart();
   renderHero();
   renderSuggestions();
+  renderMedia();
   startHeroTimer();
 }
 
@@ -294,12 +328,28 @@ function bindEvents() {
   $("#placeOrder").addEventListener("click", placeOrder);
   $("#callWaiter").addEventListener("click", callWaiter);
   $("#requestBill").addEventListener("click", requestBill);
+  document.querySelectorAll("[data-nav]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = button.dataset.nav;
+      if (target === "status" && !state.latestOrder) {
+        showScreen(state.cart.size ? "cart" : "menu");
+        showToast(state.cart.size ? "Review your cart first." : "Place an order first.");
+        return;
+      }
+      showScreen(target);
+    });
+  });
 }
 
 function showScreen(name) {
   menuView.classList.toggle("screen-active", name === "menu");
   cartView.classList.toggle("screen-active", name === "cart");
   statusView.classList.toggle("screen-active", name === "status");
+  mediaView.classList.toggle("screen-active", name === "media");
+  document.querySelectorAll("[data-nav]").forEach((button) => {
+    const target = button.dataset.nav;
+    button.classList.toggle("active", target === name || (name === "cart" && target === "status"));
+  });
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -379,6 +429,25 @@ function renderSuggestions() {
   suggestionRow.querySelectorAll("button").forEach((button) => {
     button.addEventListener("click", () => openItem(findMenuItem(button.dataset.id)));
   });
+}
+
+function renderMedia() {
+  mediaGrid.innerHTML = MOCK_MEDIA_POSTS.map(
+    (post) => `
+      <article class="media-card">
+        <img src="${post.image}" alt="${post.title}" loading="lazy" />
+        <div class="media-card-content">
+          <div class="media-source">
+            <span>${post.source}</span>
+            <small>${post.account}</small>
+          </div>
+          <h2>${post.title}</h2>
+          <p>${post.caption}</p>
+          <a href="${post.url}" target="_blank" rel="noreferrer">Open Instagram</a>
+        </div>
+      </article>
+    `
+  ).join("");
 }
 
 function renderMenu() {
