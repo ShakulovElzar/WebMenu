@@ -170,6 +170,7 @@ const MOCK_MEDIA_POSTS = [
     caption: "Open the official profile to view the newest posts, stories, and reels.",
     image: MENU_IMAGES.cocktail,
     url: CONFIG.instagramUrl,
+    embedUrl: "",
   },
   {
     id: "sissi-instagram-2",
@@ -179,6 +180,7 @@ const MOCK_MEDIA_POSTS = [
     caption: "A place for approved customer photos and tagged visits.",
     image: MENU_IMAGES.dessert,
     url: CONFIG.instagramUrl,
+    embedUrl: "",
   },
   {
     id: "sissi-instagram-3",
@@ -188,6 +190,7 @@ const MOCK_MEDIA_POSTS = [
     caption: "Use real Instagram post URLs here when you choose which posts to feature.",
     image: MENU_IMAGES.kitchen,
     url: CONFIG.instagramUrl,
+    embedUrl: "",
   },
 ];
 
@@ -258,6 +261,7 @@ const state = {
   heroIndex: 0,
   heroTimer: null,
   heroTouchX: null,
+  storyFile: null,
   latestOrder: null,
 };
 
@@ -275,6 +279,7 @@ const mediaGrid = $("#mediaGrid");
 const detailSheet = $("#detailSheet");
 const suggestionRow = $("#suggestionRow");
 const heroCard = $("#heroCard");
+const storyPhotoInput = $("#storyPhotoInput");
 const toast = $("#toast");
 
 document.addEventListener("DOMContentLoaded", init);
@@ -328,6 +333,13 @@ function bindEvents() {
   $("#placeOrder").addEventListener("click", placeOrder);
   $("#callWaiter").addEventListener("click", callWaiter);
   $("#requestBill").addEventListener("click", requestBill);
+  storyPhotoInput.addEventListener("change", handleStoryPhoto);
+  document.querySelectorAll("[data-story-photo]").forEach((button) => {
+    button.addEventListener("click", () => storyPhotoInput.click());
+  });
+  document.querySelectorAll("[data-story-share]").forEach((button) => {
+    button.addEventListener("click", shareStoryPhoto);
+  });
   document.querySelectorAll("[data-nav]").forEach((button) => {
     button.addEventListener("click", () => {
       const target = button.dataset.nav;
@@ -435,7 +447,7 @@ function renderMedia() {
   mediaGrid.innerHTML = MOCK_MEDIA_POSTS.map(
     (post) => `
       <article class="media-card">
-        <img src="${post.image}" alt="${post.title}" loading="lazy" />
+        ${post.embedUrl ? instagramEmbed(post.embedUrl) : `<img src="${post.image}" alt="${post.title}" loading="lazy" />`}
         <div class="media-card-content">
           <div class="media-source">
             <span>${post.source}</span>
@@ -448,6 +460,8 @@ function renderMedia() {
       </article>
     `
   ).join("");
+
+  if (window.instgrm?.Embeds) window.instgrm.Embeds.process();
 }
 
 function renderMenu() {
@@ -665,6 +679,50 @@ async function requestBill() {
   showToast("Bill request sent.");
 }
 
+function handleStoryPhoto(event) {
+  const [file] = event.target.files;
+  if (!file) return;
+  state.storyFile = file;
+  document.querySelectorAll("[data-story-status]").forEach((element) => {
+    element.textContent = `${file.name} ready to share.`;
+  });
+  showToast("Photo ready. Tap Share story.");
+}
+
+async function shareStoryPhoto() {
+  if (!state.storyFile) {
+    storyPhotoInput.click();
+    showToast("Choose a photo first.");
+    return;
+  }
+
+  const shareData = {
+    title: "Sissi Bistro Bar MDC",
+    text: "At Sissi Bistro Bar MDC. Tag @sissi_bistro_bar_mdc",
+    files: [state.storyFile],
+  };
+
+  try {
+    if (navigator.canShare?.(shareData)) {
+      await navigator.share(shareData);
+      return;
+    }
+
+    if (navigator.share) {
+      await navigator.share({
+        title: shareData.title,
+        text: shareData.text,
+        url: CONFIG.instagramUrl,
+      });
+      return;
+    }
+
+    window.open(CONFIG.instagramUrl, "_blank", "noopener,noreferrer");
+  } catch (error) {
+    showToast("Sharing was cancelled.");
+  }
+}
+
 function findMenuItem(id) {
   return state.menu.find((item) => item.id === id);
 }
@@ -693,6 +751,14 @@ function heroText(text, mobileWords = 4) {
 
 function labelPrice(label) {
   return label === "Ask" ? label : `\u20ac${label}`;
+}
+
+function instagramEmbed(url) {
+  return `
+    <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14">
+      <a href="${url}" target="_blank" rel="noreferrer">View this post on Instagram</a>
+    </blockquote>
+  `;
 }
 
 function showToast(message) {

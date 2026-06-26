@@ -105,8 +105,12 @@
           <div>
             <h2>Share your visit</h2>
             <p>Tag @sissi_bistro_bar_mdc and your photo can be featured in Our Media.</p>
+            <small class="story-status" data-story-status>No photo selected.</small>
           </div>
-          <a class="secondary-link" href="https://www.instagram.com/sissi_bistro_bar_mdc" target="_blank" rel="noreferrer">Open Instagram</a>
+          <div class="share-actions">
+            <button class="secondary-link" type="button" data-story-photo>Take photo</button>
+            <button class="primary-link" type="button" data-story-share>Share story</button>
+          </div>
         </article>
 
         <section class="order-items" id="orderItems" aria-label="Ordered items"></section>
@@ -138,8 +142,12 @@
           <div>
             <h2>Get featured</h2>
             <p>Post your table, tag the bar, and staff can add approved photos here.</p>
+            <small class="story-status" data-story-status>No photo selected.</small>
           </div>
-          <a class="primary-link" href="https://www.instagram.com/sissi_bistro_bar_mdc" target="_blank" rel="noreferrer">Share</a>
+          <div class="share-actions">
+            <button class="secondary-link" type="button" data-story-photo>Take photo</button>
+            <button class="primary-link" type="button" data-story-share>Share story</button>
+          </div>
         </section>
 
         <section class="media-grid" id="mediaGrid" aria-label="Social media posts"></section>
@@ -198,6 +206,8 @@
     </section>
 
     <div class="toast" id="toast" role="status"></div>
+    <input id="storyPhotoInput" type="file" accept="image/*" capture="environment" hidden />
+    <script async src="https://www.instagram.com/embed.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

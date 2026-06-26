@@ -789,6 +789,22 @@ textarea::placeholder {
   line-height: 1.35;
 }
 
+.story-status {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.share-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .social-avatar {
   display: grid;
   place-items: center;
@@ -813,6 +829,12 @@ textarea::placeholder {
   font-weight: 850;
   text-decoration: none;
   white-space: nowrap;
+}
+
+button.secondary-link,
+button.primary-link {
+  border: 0;
+  cursor: pointer;
 }
 
 .primary-link {
@@ -843,6 +865,15 @@ textarea::placeholder {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+}
+
+.media-card .instagram-media {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: #fff !important;
 }
 
 .media-card-content {
@@ -1264,5 +1295,20 @@ button:active {
 
   .bottom-panel {
     width: min(calc(100vw - 28px), 460px);
+  }
+
+  .share-card,
+  .social-account-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .share-actions {
+    justify-content: stretch;
+  }
+
+  .share-actions > * {
+    flex: 1 1 auto;
+    text-align: center;
   }
 }
