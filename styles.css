@@ -860,6 +860,14 @@ button.primary-link {
   background: var(--surface);
 }
 
+.media-empty {
+  grid-column: 1 / -1;
+}
+
+.instagram-card {
+  background: transparent;
+}
+
 .media-card img {
   display: block;
   width: 100%;

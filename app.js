@@ -161,37 +161,10 @@ const MOCK_MENU = [
   menuItem("cioccolata-nocciola", "Nocciola", "Cioccolata", 7, "chocolate", 88, ["Chocolate"], false, null, "Fondente con panna, topping alla nocciola e granella."),
 ];
 
-const MOCK_MEDIA_POSTS = [
-  {
-    id: "sissi-instagram-1",
-    source: "Instagram",
-    account: "@sissi_bistro_bar_mdc",
-    title: "Latest from Sissi",
-    caption: "Open the official profile to view the newest posts, stories, and reels.",
-    image: MENU_IMAGES.cocktail,
-    url: CONFIG.instagramUrl,
-    embedUrl: "",
-  },
-  {
-    id: "sissi-instagram-2",
-    source: "Instagram",
-    account: "@sissi_bistro_bar_mdc",
-    title: "Bistro moments",
-    caption: "A place for approved customer photos and tagged visits.",
-    image: MENU_IMAGES.dessert,
-    url: CONFIG.instagramUrl,
-    embedUrl: "",
-  },
-  {
-    id: "sissi-instagram-3",
-    source: "Instagram",
-    account: "@sissi_bistro_bar_mdc",
-    title: "Food and drinks",
-    caption: "Use real Instagram post URLs here when you choose which posts to feature.",
-    image: MENU_IMAGES.kitchen,
-    url: CONFIG.instagramUrl,
-    embedUrl: "",
-  },
+const INSTAGRAM_POST_URLS = [
+  // Add real post or reel links here, for example:
+  // "https://www.instagram.com/p/POST_SHORTCODE/",
+  // "https://www.instagram.com/reel/REEL_SHORTCODE/",
 ];
 
 const Api = {
@@ -444,22 +417,34 @@ function renderSuggestions() {
 }
 
 function renderMedia() {
-  mediaGrid.innerHTML = MOCK_MEDIA_POSTS.map(
-    (post) => `
-      <article class="media-card">
-        ${post.embedUrl ? instagramEmbed(post.embedUrl) : `<img src="${post.image}" alt="${post.title}" loading="lazy" />`}
+  const realPostUrls = INSTAGRAM_POST_URLS.filter(Boolean);
+
+  if (!realPostUrls.length) {
+    mediaGrid.innerHTML = `
+      <article class="media-card media-empty">
         <div class="media-card-content">
           <div class="media-source">
-            <span>${post.source}</span>
-            <small>${post.account}</small>
+            <span>Instagram</span>
+            <small>@sissi_bistro_bar_mdc</small>
           </div>
-          <h2>${post.title}</h2>
-          <p>${post.caption}</p>
-          <a href="${post.url}" target="_blank" rel="noreferrer">Open Instagram</a>
+          <h2>Real posts need post links</h2>
+          <p>Instagram embeds require exact post or reel URLs, not only the profile link.</p>
+          <a href="${CONFIG.instagramUrl}" target="_blank" rel="noreferrer">Open Instagram</a>
         </div>
       </article>
-    `
-  ).join("");
+    `;
+    return;
+  }
+
+  mediaGrid.innerHTML = realPostUrls
+    .map(
+      (url) => `
+        <article class="media-card instagram-card">
+          ${instagramEmbed(url)}
+        </article>
+      `
+    )
+    .join("");
 
   if (window.instgrm?.Embeds) window.instgrm.Embeds.process();
 }
