@@ -162,9 +162,9 @@ const MOCK_MENU = [
 ];
 
 const INSTAGRAM_POST_URLS = [
-  // Add real post or reel links here, for example:
-  // "https://www.instagram.com/p/POST_SHORTCODE/",
-  // "https://www.instagram.com/reel/REEL_SHORTCODE/",
+  "https://www.instagram.com/p/DUJHKueDBbE/",
+  "https://www.instagram.com/p/DTN1QO0DNwd/",
+  "https://www.instagram.com/reel/DG-hl6bt-BI/",
 ];
 
 const Api = {
